@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../utils.h"
 #include "../aes.h"
+#include <string.h>
 
 #ifdef TEST_FOOTPRINT
 #define printf(fmt, ...) (0)
