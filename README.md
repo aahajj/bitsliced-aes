@@ -1,6 +1,15 @@
 Bitsliced AES
 -------------
 
+# Overview 
+
+| Property            | Value       |
+| ------------------- | ------------|
+| Type                | Bitsliced   |
+| Supported Modes     | ECB and CTR |
+| Key Lengths         | 128 Bit     |
+| Language            | C           |
+
 Bitslicing is a technique to compute steps in an algorithm 1 bit at a time.  Each bit in a processor word would be a part
 of a different data stream for that particular algorithm.  It is attractive because then it can run many different streams 
 in parallel (depending on the word length).  E.g. a 32 bit word length can compute 32 different streams in parallel.
@@ -8,6 +17,43 @@ in parallel (depending on the word length).  E.g. a 32 bit word length can compu
 Some encryption algorithms allow blocks to be operated on in parallel like AES CTR.  So if there is enough input, say 32 blocks,
 then a 32 bit processor can achieve full utilitization by filling all bits in word and enciphering all blocks in parallel.
 
+
+Usage
+----------
+To perform Bitslicing encryption or decryption:
+```c
+
+// For encrypting using ecb
+void aes_ecb_encrypt(uint8_t * outputb, uint8_t * inputb, size_t size, uint8_t * key);
+// For decrypting using ecb
+void aes_ecb_decrypt(uint8_t * outputb, uint8_t * inputb, size_t size, uint8_t * key);
+
+/* Same function for encrypting as for decrypting in CTR mode */
+void aes_ctr_encrypt(uint8_t * outputb, uint8_t * inputb, size_t size, uint8_t * key, uint8_t * iv);
+
+
+```
+
+Compiling
+----------
+
+Compile the benchmarking program by running: 
+
+Note: Benchmark program requires OpenSSL.
+
+```bash
+make
+```
+
+Compile the test program by running:
+
+```bash
+make test
+```
+
+Change to the word length of your processor by editing the `WORD_SIZE` macro in bs.h.  Optimize for
+footprint by using `-O2` instead of `-O3` in the Makefile and also deleting the `-DUNROLL_TRANSPOSE` 
+flag.
 
 Research
 --------
@@ -34,26 +80,6 @@ Performance could be improved by about 5-10x by writting in assembly and ensurin
 more operations stay in registers rather then spill to memory.
 
 
-Compiling
-----------
 
-Compile the benchmarking program by running:
-
-```bash
-make
-```
-
-Benchmark program requires OpenSSL.
-
-
-Compile the test program by running:
-
-```bash
-make test
-```
-
-Change to the word length of your processor by editing the `WORD_SIZE` macro in bs.h.  Optimize for
-footprint by using `-O2` instead of `-O3` in the Makefile and also deleting the `-DUNROLL_TRANSPOSE` 
-flag.
 
 
