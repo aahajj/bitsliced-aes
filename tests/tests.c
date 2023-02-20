@@ -3,6 +3,7 @@
 #include "../utils.h"
 #include "../aes.h"
 #include <string.h>
+#include "../poison.h"
 
 #ifdef TEST_FOOTPRINT
 #define printf(fmt, ...) (0)
@@ -78,6 +79,11 @@ void aes_ctr_test()
 
     printf("AES CTR\n");
 
+    //poison
+    poison(key_vector, sizeof(key_vector));
+    poison(iv_vector, sizeof(iv_vector));
+    poison(pt_vector, sizeof(pt_vector));
+
     aes_ctr_encrypt(output,pt_vector,AES_CTR_TESTS_BYTES,key_vector, iv_vector);
 
     printf("cipher text: \n");
@@ -85,6 +91,12 @@ void aes_ctr_test()
     
     aes_ctr_decrypt(input,output,AES_CTR_TESTS_BYTES,key_vector, iv_vector);
 
+    //unpoison
+    unpoison(key_vector, sizeof(key_vector));
+    unpoison(iv_vector, sizeof(iv_vector));
+    unpoison(pt_vector, sizeof(pt_vector));
+
+    
     printf("plain text: \n");
     dump_hex(input,AES_CTR_TESTS_BYTES);
 
