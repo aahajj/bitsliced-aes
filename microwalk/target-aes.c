@@ -2,10 +2,7 @@
 #include <stdio.h>
 
 #include "../aes.h"
-
-#define KEYBITS 128
-
-uint8_t key_vector[32];
+uint8_t key_vector[16];
 
 extern void RunTarget(FILE *input) {
   // TODO Read test case and execute target primitive
@@ -22,13 +19,13 @@ extern void RunTarget(FILE *input) {
   //
   //
   //
-	uint8_t data[32];
-	uint8_t output[32];
+	uint8_t data[16];
+	uint8_t output[16];
 
-  if (fread(data, 1, 32, input) != 32)
+  if (fread(data, 1, 16, input) != 16)
     return;
 
-	aes_ecb_encrypt(output, data,32,key_vector);
+	aes_ecb_encrypt(output, data, 16,key_vector);
   
 }
 
@@ -44,7 +41,9 @@ extern void InitTarget(FILE *input) {
   // You should really avoid that a part of the library gets initialized late,
   // as this may generate false positives.
   //
-  if (fread(key_vector, 1, 32, input) != 32)
+  if (fread(key_vector, 1, 16, input) != 16)
     return;
+  
+  key_vector[16] = "\x2b\x7e\x15\x16\x28\xae\xd2\xa6\xab\xf7\x15\x88\x09\xcf\x4f\x3c";
 
 }
