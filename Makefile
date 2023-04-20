@@ -6,6 +6,9 @@ CFLAGS = -O3 -fdata-sections -ffunction-sections -DUNROLL_TRANSPOSE -g
 
 name = bitslice
 
+default: aes.so
+
+
 $(name):  _testbench $(obj)
 	$(CC) $(LDFLAGS) -o $@ $(obj) $(LDFLAGS)
 
@@ -32,6 +35,8 @@ _testbench: testbench/app.c
 	$(eval LDFLAGS+= -lcrypto)
 	$(CC) -c $(CFLAGS) -o $@.o $^
 
+aes.so: aes.o bs.o key_schedule.o
+	$(CC) -Wall -Os -g -shared -o libaes.so bs.o aes.o key_schedule.o
 
 clean:
-	rm -f $(obj) _test.o _footprint.o _testbench.o $(name)
+	rm -f $(obj) aes.o libaes.so _test.o _footprint.o _testbench.o $(name)
