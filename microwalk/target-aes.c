@@ -43,7 +43,5 @@ extern void InitTarget(FILE *input) {
   //
   if (fread(key_vector, 1, 16, input) != 16)
     return;
-  
-  key_vector[16] = "\x2b\x7e\x15\x16\x28\xae\xd2\xa6\xab\xf7\x15\x88\x09\xcf\x4f\x3c";
 
 }
